@@ -1,4 +1,4 @@
 
 
-Backend: node, express, cors
-Frontend: vite
+- Backend: node, express, cors
+- Frontend: vite
