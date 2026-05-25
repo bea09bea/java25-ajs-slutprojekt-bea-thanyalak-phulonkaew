@@ -2,7 +2,7 @@ import {db} from './database.config';
 
 //lägga till task i tabell (utan person)
 export const createTaskStmt = db.prepare(`
-   INSERT INTO tasks (title, project, description, deadline) VALUES (?,?,?,?)
+   INSERT INTO tasks (title, project, description, deadline, person, category) VALUES (?,?,?,?,?,?)
 `);
 
 //Hämta alla tasks

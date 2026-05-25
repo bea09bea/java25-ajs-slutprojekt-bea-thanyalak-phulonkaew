@@ -17,10 +17,14 @@ export const getAllTasks = ():task[] => {
 }
 
 export const createTask = (newTask: newTask): number => {
-     const result = stmt.createTaskStmt.run(    newTask.title, 
+     const result = stmt.createTaskStmt.run(        
+          newTask.title, 
           newTask.project, 
           newTask.description, 
-          newTask.deadline);
+          newTask.deadline,
+          newTask.person,
+          newTask.category
+     );
 
      return result.lastInsertRowid as number;
 }

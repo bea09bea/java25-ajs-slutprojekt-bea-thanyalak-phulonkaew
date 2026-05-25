@@ -1,4 +1,4 @@
-export type task = {
+export type Task = {
      id: number;
      title: string;
      project: string;
@@ -9,11 +9,9 @@ export type task = {
      category: string;
 }
 
-export type newTask = {
+export type NewTask = {
      title: string;
      project: string;
      description: string;
      deadline: string;
-     person: string;
-     category: string;
 }
