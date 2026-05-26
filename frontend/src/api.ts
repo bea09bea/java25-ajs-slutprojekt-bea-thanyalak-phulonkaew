@@ -54,6 +54,31 @@ export const updateAll = async (id:number, title:string, project:string, descrip
      return data;
 }
 
+export const createNewTask = async (title:string, project:string, description:string, deadline:string, person:string, category:string) => {
+     const options = {
+        method: 'POST',
+        body: JSON.stringify({
+          title: title,
+          project: project,
+          description: description,
+          deadline: deadline,
+          person: person,
+          category: category
+          }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"}
+          }
+
+     const res = await fetch(BASE_URL, options);
+
+     if (!res.ok) {
+          throw new Error('Could not create new task');
+     }
+
+     const data = await res.json();
+     return data;
+}
+
 export const deleteTask = async (id:number) => {
      const options = {
           method: 'DELETE'

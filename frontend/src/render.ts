@@ -1,4 +1,4 @@
-import { deleteTask, getAllTasks, updateAll, updateStatus } from "./api";
+import { createNewTask, deleteTask, getAllTasks, updateAll, updateStatus } from "./api";
 import type { Task, NewTask } from "./types";
 import {clearBoard} from "./uxFunctions"
 
@@ -129,7 +129,7 @@ export const renderTasks = (tasks: Task[]) => {
                          const form = document.createElement('form');
 
                          form.innerHTML = `
-                              <h2 class="editTitel">Edit: </h2>
+                              <h2 class="editTitel">Edit task: </h2>
                               <label for="titel">Titel:</label>
                               <input type="text" id="titel" name="titel" value="${task.title}">
 
@@ -190,11 +190,77 @@ export const renderTasks = (tasks: Task[]) => {
                               alert(result.message);
                               await refreshTasks();
                          })
-                         
                     })
 
                     card.append(extra);
                }
+          });
+
+          //Skapa ny task
+          const editContainer = document.querySelector('.editContainer');
+          const createBtn = document.querySelector('.createNew');
+          createBtn?.addEventListener('click', () =>{
+               const formCreateNewTask = document.createElement('form');
+               if (!editContainer) return
+                         editContainer.innerHTML = '';
+
+                         formCreateNewTask.innerHTML = `
+                              <h2 class="editTitel">Fill all boxes to create new task: </h2>
+                              <label for="titel">Titel:</label>
+                              <input type="text" id="titel" name="titel" >
+
+                              <label for="pName">Project name:</label>
+                              <input type="text" id="pName" name="pName">
+
+                              <label for="description">Description:</label>
+                              <input type="text" id="description" name="description">
+
+                              <label for="deadline">Deadline:</label>
+                              <input type="text" id="deadline" name="deadline">
+                              
+                              <label for="person">Assigned to:</label>
+                              <input type="text" id="person" name="person">
+
+                              <label for="category">Role:</label>
+                              <select id="category" name="category">
+                                   <option value="ux" ${task.category === 'ux' ? 'selected' : ''}>UX</option>
+
+                                   <option value="frontend" ${task.category === 'frontend' ? 'selected' : ''}>
+                                        Frontend
+                                   </option>
+
+                                   <option value="backend" ${task.category === 'backend' ? 'selected' : ''}>
+                                        Backend
+                                   </option>
+                              </select>
+
+                              <input class="Savebtn" type="submit" value="Save">
+                         `
+                         editContainer?.append(formCreateNewTask);
+
+                         formCreateNewTask.addEventListener('submit', async (e)=> {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              const titel = (formCreateNewTask.querySelector('#titel') as HTMLInputElement).value;
+                              const project = (formCreateNewTask.querySelector('#pName') as HTMLInputElement).value;
+                              const description = (formCreateNewTask.querySelector('#description') as HTMLInputElement).value;
+                              const deadline = (formCreateNewTask.querySelector('#deadline') as HTMLInputElement).value;
+                              const person = (formCreateNewTask.querySelector('#person') as HTMLInputElement).value;
+                              const category = (formCreateNewTask.querySelector('#category') as HTMLSelectElement).value;
+
+                              const result = await createNewTask(
+                                   titel,
+                                   project,
+                                   deadline,
+                                   description,
+                                   person,
+                                   category
+                              );
+                              alert(result.message);
+                              await refreshTasks();
+                         })
+
           });
 
           //radera knapp bara för done-column
