@@ -39,10 +39,28 @@ router.patch('/:id/assigned', (req, res)=> {
      res.json({message});
 });
 
+//Update all
+router.patch('/:id/edit', (req, res)=> {
+     const id = Number(req.params.id);
+     const {title, project,deadline,description,person,category} = req.body;
+
+     if(!title || !project || !deadline || !description || !person || !category) {
+          return res.status(400).json({
+               message: 'Failed to update'
+          });
+     }
+
+     const hasUpdated = db.updateAll(id, title, project,deadline,description,person,category);
+
+     const message = hasUpdated? 'updated successfully':'failed to update'
+     res.json({message});
+});
+
+
 router.delete('/:id', (req, res)=> {
      const id = Number(req.params.id);
      const isDeleted = db.deleteTask(id);
-     const message = isDeleted? 'success':'failed'
+     const message = isDeleted? 'deleted successfully':'failed to delete'
      res.json({message});
 });
 

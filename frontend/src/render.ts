@@ -1,5 +1,5 @@
-import { deleteTask, getAllTasks, updateStatus } from "./api";
-import type { Task } from "./types";
+import { deleteTask, getAllTasks, updateAll, updateStatus } from "./api";
+import type { Task, NewTask } from "./types";
 import {clearBoard} from "./uxFunctions"
 
 const getExtraContent = (task:Task) => {
@@ -11,6 +11,7 @@ const getExtraContent = (task:Task) => {
                     <p>Deadline: ${task.deadline}</p>
                     <p>Description: ${task.description}</p>
                     <button class='move fromNew'> > </button>
+                    <button class='edit'>&#9998;</button>
                `
              
            case 'doing':
@@ -21,6 +22,7 @@ const getExtraContent = (task:Task) => {
                     <p>Description: ${task.description}</p>
                     <button class='move toNew'> < </button>
                     <button class='move toDone'> > </button> 
+                    <button class='edit'>&#9998;</button>
                `
               
           case 'done':
@@ -30,6 +32,7 @@ const getExtraContent = (task:Task) => {
                     <p>Deadline: ${task.deadline}</p>
                     <p>Description: ${task.description}</p>
                     <button class='move toDoing'> < </button>
+                    <button class='edit'>&#9998;</button>
                `
           default:
                return "";
@@ -113,6 +116,83 @@ export const renderTasks = (tasks: Task[]) => {
                          await refreshTasks();
                          })
 
+                    //Redigera
+                    const editBtn = extra.querySelector('.edit');
+                    editBtn?.addEventListener('click', (e)=> {
+                         e.stopPropagation();
+
+                         const editContainer = document.querySelector('.editContainer');
+
+                         if (!editContainer) return
+                         editContainer.innerHTML = '';
+
+                         const form = document.createElement('form');
+
+                         form.innerHTML = `
+                              <h2 class="editTitel">Edit: </h2>
+                              <label for="titel">Titel:</label>
+                              <input type="text" id="titel" name="titel" value="${task.title}">
+
+                              <label for="pName">Project name:</label>
+                              <input type="text" id="pName" name="pName" 
+                              value="${task.project}">
+
+                              <label for="description">Description:</label>
+                              <input type="text" id="description" name="description" 
+                              value="${task.description}">
+
+                              <label for="deadline">Deadline:</label>
+                              <input type="text" id="deadline" name="deadline" 
+                              value="${task.deadline}">
+                              
+                              <label for="person">Assigned to:</label>
+                              <input type="text" id="person" name="person" 
+                              value="${task.person}">
+
+                              <label for="category">Role:</label>
+                              <select id="category" name="category">
+                                   <option value="ux" ${task.category === 'ux' ? 'selected' : ''}>UX</option>
+
+                                   <option value="frontend" ${task.category === 'frontend' ? 'selected' : ''}>
+                                        Frontend
+                                   </option>
+
+                                   <option value="backend" ${task.category === 'backend' ? 'selected' : ''}>
+                                        Backend
+                                   </option>
+                              </select>
+
+                              <input class="Savebtn" type="submit" value="Save">
+                         `
+                         editContainer?.append(form);
+
+                         form.addEventListener('submit', async (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              const titel = (form.querySelector('#titel') as HTMLInputElement).value;
+                              const project = (form.querySelector('#pName') as HTMLInputElement).value;
+                              const description = (form.querySelector('#description') as HTMLInputElement).value;
+                              const deadline = (form.querySelector('#deadline') as HTMLInputElement).value;
+                              const person = (form.querySelector('#person') as HTMLInputElement).value;
+                              const category = (form.querySelector('#category') as HTMLSelectElement).value;
+
+                              const result = await updateAll(
+                                   task.id,
+                                   titel,
+                                   project,
+                                   deadline,
+                                   description,
+                                   person,
+                                   task.status,
+                                   category
+                              );
+                              alert(result.message);
+                              await refreshTasks();
+                         })
+                         
+                    })
+
                     card.append(extra);
                }
           });
@@ -128,7 +208,8 @@ export const renderTasks = (tasks: Task[]) => {
                btn.addEventListener('click', async (e)=> {
                     e.stopPropagation();
 
-                    await deleteTask(task.id)
+                    const result = await deleteTask(task.id)
+                    alert(result.message);
 
                     card.remove();
                });

@@ -20,7 +20,34 @@ export const updateStatus = async (id:number, status:string) => {
      const res = await fetch(BASE_URL + id + '/' + 'status', options);
 
      if (!res.ok) {
-          throw new Error('Kunde inte uppdateras');
+          throw new Error('Could not update Status');
+     }
+
+     const data = await res.json();
+     return data;
+}
+
+export const updateAll = async (id:number, title:string, project:string, description:string, deadline:string, person:string, status:string, category:string) => {
+     const options = {
+        method: 'PATCH',
+        body: JSON.stringify({
+          id: id,
+          title: title,
+          project: project,
+          description: description,
+          deadline: deadline,
+          person: person,
+          status: status,
+          category: category
+          }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"}
+          }
+
+     const res = await fetch(BASE_URL + id + '/' + 'edit', options);
+
+     if (!res.ok) {
+          throw new Error('Could not update');
      }
 
      const data = await res.json();
@@ -35,7 +62,7 @@ export const deleteTask = async (id:number) => {
      const res = await fetch(BASE_URL + id, options);
 
      if (!res.ok) {
-          throw new Error('Kunde inte radera task');
+          throw new Error('Could not delete task');
      }
 
      const data = await res.json();

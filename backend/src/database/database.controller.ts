@@ -39,6 +39,11 @@ export const updateAssigned = (id:number, person:string, category:string) => {
      return result.changes 
 }
 
+export const updateAll = (id:number,title: string, project:string, description:string, deadline:string, person:string, category:string) => {
+     const result = stmt.updateAllStmt.run(title, project,deadline,description,person,category, id)
+     return result.changes
+}
+
 export const deleteTask = (id:number):number => {
      const result = stmt.deleteTaskStmt.run(id);
 

@@ -9,9 +9,9 @@ export type Task = {
      category: string;
 }
 
-/* export type NewTask = {
+export type NewTask = {
      title: string;
      project: string;
      description: string;
      deadline: string;
-} */
+}
