@@ -257,6 +257,7 @@ export const renderTasks = (tasks: Task[]) => {
                                    person,
                                    category
                               );
+                              formCreateNewTask.reset();
                               alert(result.message);
                               await refreshTasks();
                          })
