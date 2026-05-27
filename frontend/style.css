@@ -27,6 +27,20 @@ h2 {
   margin-top: 10px;
 }
 
+p {
+  margin: 10px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 20px;
+}
+
+h3 {
+  font-size: 25px;
+  margin-top: 10px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin: 10px;
+  margin-bottom: 0px;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -69,20 +83,6 @@ h2 {
   margin: 15px;
   border: 1px solid black;
   cursor: pointer;
-}
-
-p {
-  margin: 10px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  font-size: 20px;
-}
-
-h3 {
-  font-size: 25px;
-  margin-top: 10px;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  margin: 10px;
-  margin-bottom: 0px;
 }
 
 .move {
@@ -185,28 +185,4 @@ select {
 
 .edit:hover, .move:hover {
   background-color: rgb(164, 193, 247);
-}
-/* ---------- */
-.person-container {
-  display: flex;
-  margin: 10px;
-  margin-left: 0px;
-  margin-top: 0px;
-}
-
-.card-done {
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  flex-direction: flex;
-  background-color: white;
-  margin: 15px;
-  border: 1px solid black;
-}
-
-.content-done {
-  grid: 1/2 span;
-}
-
-.card-done  > div:nth-child(2) {
-  margin-left: 10px;
 }

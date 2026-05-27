@@ -8,10 +8,3 @@ export type Task = {
      status: string;
      category: string;
 }
-
-export type NewTask = {
-     title: string;
-     project: string;
-     description: string;
-     deadline: string;
-}

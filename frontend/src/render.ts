@@ -1,6 +1,13 @@
 import { createNewTask, deleteTask, getAllTasks, updateAll, updateStatus } from "./api";
-import type { Task, NewTask } from "./types";
-import {clearBoard} from "./uxFunctions"
+import type { Task } from "./types";
+
+const clearBoard = () => {
+     const cards = document.querySelectorAll('.card');
+
+     cards.forEach((card ) => {
+          card.remove();
+     });
+}
 
 const getExtraContent = (task:Task) => {
      switch (task.status) {
