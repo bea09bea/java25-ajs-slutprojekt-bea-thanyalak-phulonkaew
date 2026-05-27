@@ -33,15 +33,15 @@ root/
 │   │   |  ├── tasks.types.ts  
 │   │   ├── routes/      (Definierar API-endpoints och kopplar requests till rätt funktioner)  
 │   │   |  ├── task.route.ts  
-├── frontend/
-│   ├── .gitignore
-│   ├── index.html
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── tsconfig.json
-│   ├── style.css
-│   ├── src/
-│   │   ├── api.ts       (hanterar HTTP request & response)
-│   │   ├── main.ts      (renderar kort)
-│   │   ├── render.ts    (skapar kort)
-│   │   ├── types.ts     (TS-typer)
+├── frontend/  
+│   ├── .gitignore  
+│   ├── index.html  
+│   ├── package.json  
+│   ├── package-lock.json  
+│   ├── tsconfig.json  
+│   ├── style.css  
+│   ├── src/  
+│   │   ├── api.ts       (hanterar HTTP request & response)  
+│   │   ├── main.ts      (renderar kort)  
+│   │   ├── render.ts    (skapar kort)  
+│   │   ├── types.ts     (TS-typer)  
