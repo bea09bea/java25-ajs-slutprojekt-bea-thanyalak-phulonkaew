@@ -24,15 +24,15 @@ root/
 │   ├── scrumboard.db  (SQLite-databasen)  
 │   ├── server.ts  
 │   ├── tsconfig.json  
-│   ├── src/    
-│   │   ├── database/    (All logik för att hantera databasen)                   
-│   │   |  ├── database.controller.ts  
-│   │   |  ├── database.statements.ts  
-│   │   |  ├── database.config.ts  
-│   │   ├── models/      (TS typer)  
-│   │   |  ├── tasks.types.ts  
-│   │   ├── routes/      (Definierar API-endpoints och kopplar requests till rätt funktioner)  
-│   │   |  ├── task.route.ts  
+│   └── src/    
+│        ├── database/    (All logik för att hantera databasen)                   
+│        |  ├── database.controller.ts  
+│        |  ├── database.statements.ts  
+│        |  └── database.config.ts  
+│        ├── models/      (TS typer)  
+│        |  └── tasks.types.ts  
+│        └── routes/      (Definierar API-endpoints och kopplar requests till rätt funktioner)  
+│            └── task.route.ts  
 ├── frontend/  
 │   ├── .gitignore  
 │   ├── index.html  
@@ -40,8 +40,8 @@ root/
 │   ├── package-lock.json  
 │   ├── tsconfig.json  
 │   ├── style.css  
-│   ├── src/  
-│   │   ├── api.ts       (hanterar HTTP request & response)  
-│   │   ├── main.ts      (renderar kort)  
-│   │   ├── render.ts    (skapar kort)  
-│   │   ├── types.ts     (TS-typer)  
+│   └── src/
+        ├── api.ts       (hanterar HTTP request & response)  
+        ├── main.ts      (renderar kort)  
+        ├── render.ts    (skapar kort)  
+        └── types.ts     (TS-typer)  
