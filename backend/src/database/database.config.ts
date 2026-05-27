@@ -1,8 +1,8 @@
 import {DatabaseSync} from 'node:sqlite';
 
+//Skapa tasks-tabell om den inte redan finns
 export const db = new DatabaseSync('./scrumboard.db');
 
-//Skapa tabell
 db.exec(
      `
      CREATE TABLE IF NOT EXISTS tasks (

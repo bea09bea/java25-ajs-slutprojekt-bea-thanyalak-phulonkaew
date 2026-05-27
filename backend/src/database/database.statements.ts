@@ -1,6 +1,6 @@
 import {db} from './database.config';
 
-//lägga till task i tabell (utan person)
+//lägga till ny task i tabell
 export const createTaskStmt = db.prepare(`
    INSERT INTO tasks (title, project, description, deadline, person, category) VALUES (?,?,?,?,?,?)
 `);
@@ -20,12 +20,7 @@ export const deleteTaskStmt = db.prepare(`
    DELETE FROM tasks WHERE id = ?   
 `);
 
-//Uppdatera allt
+//Uppdatera alla fält utom status & id
 export const updateAllStmt = db.prepare(`
       UPDATE tasks SET title = ?, project = ?, description = ?, deadline = ?, person = ?, category = ? WHERE id = ?
-`);
-
-//Uppdatera person & category
-export const updateAssignedStmt = db.prepare(`
-   UPDATE tasks SET person = ?, category = ? WHERE id = ?
 `);

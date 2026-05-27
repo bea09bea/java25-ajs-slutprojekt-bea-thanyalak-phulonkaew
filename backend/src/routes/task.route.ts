@@ -1,67 +1,229 @@
-import {Router} from 'express';
-import * as db from '../database/database.controller' 
+import {Router, Request, Response} from 'express';
+import {body, param, validationResult} from 'express-validator';
+import * as db from '../database/database.controller'; 
 
+//Express router
 const router = Router();
 
-router.post('/', (req: any,res: any) => {
-     const id = db.createTask(req.body);
+//router svarar på HTTP POST med endpoint '/'
+router.post('/',
+
+     //body-anrop: Middleware från express-validator
+     body('title')
+     //.notEmpty -> validation rule
+     .notEmpty()
+     // Om validation failer sparas detta felmeddelande
+     .withMessage('Title is required'),
+
+     body('project')
+     .notEmpty()
+     .withMessage('Project name is required'),
+
+     body('description')
+     .notEmpty()
+     .withMessage('Description is required'),
+
+     body('deadline')
+     //måste vara giltigt ISO-datum
+     .isISO8601()
+     .withMessage('Deadline must be a valid date like (2026-05-27)'), 
+
+     body('person')
+     .notEmpty()
+     .withMessage('Assigned to name is required'),
+
+     body('category')
+     //isIn - Skyddar databas mot ogiltiga värden
+     .isIn(['ux', 'frontend', 'backend'])
+     .withMessage('Invalid category'),
+     
+     //Route handler - huvudlogiken
+     (req: Request,res: Response) => {
+     
+     //samlar ihop alla express-validator från middleware
+     const errors = validationResult(req);
+
+     //error handling
+     if (!errors.isEmpty()) {
+          //return stoppar funktion om blir validationfel
+          return res.status(400).json({
+               errors: errors.array(),
+          });
+     }
+
+     //om data är valid -> skicka bodyn till databas
+     db.createTask(req.body);
+
+     //Express skickar JSON tillbaka till frontend
      res.json({
-          message: `New task created with id ${id}`});
+          success: true,
+          message: `New task created sucessfully`
+     });
 });
 
-router.get('/', (req, res) => {
-     const tasks = db.getAllTasks();
-     res.json(tasks);
-});
-
-router.patch('/:id/status', (req, res)=> {
-     const id = Number(req.params.id);
-     const {status} = req.body;
-     const hasUpdated = db.updateStatus(id, status);
-
-     const message = hasUpdated? 'success':'failed'
-     res.json({message});
-});
-
-router.patch('/:id/assigned', (req, res)=> {
-     const id = Number(req.params.id);
-     const {person, category} = req.body;
-
-     if(!person || !category) {
-          return res.status(400).json({
-               message: 'person and category required'
+//router svarar på HTTP GET med endpoint '/'
+router.get('/', (req: Request, res: Response) => {
+     try {
+          const tasks = db.getAllTasks();
+          res.json(tasks); 
+     } catch (error) {
+          res.status(500).json({
+               success: false,
+               message: 'Could not fetch tasks',
           });
      }
-
-     const hasUpdated = db.updateAssigned(id, person, category);
-
-     const message = hasUpdated? 'success':'failed'
-     res.json({message});
 });
 
-//Update all
-router.patch('/:id/edit', (req, res)=> {
-     const id = Number(req.params.id);
-     const {title, project,deadline,description,person,category} = req.body;
+//router svarar på HTTP PATCH med endpoint '/id/status'
+router.patch('/:id/status',
+     param('id')
+     .isInt()
+     .withMessage('Id must be a number'),
 
-     if(!title || !project || !deadline || !description || !person || !category) {
-          return res.status(400).json({
-               message: 'Failed to update'
+     body('status')
+     .notEmpty()
+     .withMessage('Status is required')
+     .isIn(['new', 'doing', 'done'])
+     .withMessage('Invalid status'),
+
+     (req: Request, res: Response)=> {
+          const errors = validationResult(req);
+
+          if (!errors.isEmpty()) {
+               return res.status(400).json({
+                    errors: errors.array(),
+               });
+          }
+
+          const id = Number(req.params.id);
+          const {status} = req.body;
+          const hasUpdated = db.updateStatus(id, status);
+
+          if (!hasUpdated) {
+               return res.status(404).json({
+                    success: false,
+                    message: 'Task not found',
+               });
+          }
+
+          res.json({
+               success: true,
+               message: 'Status updated successfully',
           });
      }
+);
 
-     const hasUpdated = db.updateAll(id, title, project,deadline,description,person,category);
+//router svarar på HTTP PATCH med endpoint '/id/edit'
+router.patch('/:id/edit', 
+     
+     param('id')
+     .isInt()
+     .withMessage('Id must be a number'),
 
-     const message = hasUpdated? 'updated successfully':'failed to update'
-     res.json({message});
-});
+     body('title')
+     .notEmpty()
+     .withMessage('Title is required'),
 
+     body('project')
+     .notEmpty()
+     .withMessage('Project name is required'),
 
-router.delete('/:id', (req, res)=> {
-     const id = Number(req.params.id);
-     const isDeleted = db.deleteTask(id);
-     const message = isDeleted? 'deleted successfully':'failed to delete'
-     res.json({message});
-});
+     body('description')
+     .notEmpty()
+     .withMessage('Description is required'),
+
+     body('deadline')
+     .isISO8601()
+     .withMessage('Deadline must be a valid date like (2026-05-27)'), 
+
+     body('person')
+     .notEmpty()
+     .withMessage('Assigned to name is required'),
+
+     body('category')
+     .isIn(['ux', 'frontend', 'backend'])
+     .withMessage('Invalid category'),
+     
+     (req: Request, res: Response)=> {
+          const errors = validationResult(req);
+
+          if (!errors.isEmpty()) {
+               return res.status(400).json({
+                    errors: errors.array(),
+               })
+          }
+
+          const id = Number(req.params.id);
+          const {
+               title, 
+               project,
+               deadline,
+               description,
+               person,
+               category
+          } = req.body;
+
+          const hasUpdated = db.updateAll(
+               id, 
+               title, 
+               project,
+               deadline,
+               description,
+               person,
+               category
+          );
+
+          if (!hasUpdated) {
+               return res.status(404).json({
+                    success: false,
+                    message: 'Task not found',
+               });
+          }
+
+          res.json({
+               success: true,
+               message: 'Updated task successfully',
+          });
+     }
+);
+
+//router svarar på HTTP DELETE med endpoint '/id'
+router.delete('/:id', 
+     param('id')
+     .isInt()
+     .withMessage('Id must be a number'),
+
+     (req:Request, res:Response)=> {
+          const errors = validationResult(req);
+
+          if (!errors.isEmpty()) {
+               return res.status(400).json({
+                    errors: errors.array(),
+               });
+          }
+
+          try {
+               const id = Number(req.params.id);
+               const hasDeleted = db.deleteTask(id);
+
+               if (!hasDeleted) {
+                    return res.status(404).json({
+                         success: false,
+                         message: 'Task not found',
+                    });
+               }
+
+               res.json({
+                    success: true,
+                    message: 'Deleted successfully',
+               });
+          } catch (error) {
+               res.status(500).json({
+                    success: false,
+                    message: 'Could not delete task',
+               });
+          }
+     }
+);
 
 export default router;
