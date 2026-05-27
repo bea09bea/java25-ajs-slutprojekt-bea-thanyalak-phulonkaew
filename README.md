@@ -1,4 +1,4 @@
-#**Scrumboard**  
+**Scrumboard**  
 Scrumboard är en applikation där man kan hantera uppgifter i ett projekt med 3 olika kategorier.  
 
 ---------------------
@@ -16,23 +16,23 @@ Funktioner:
 
 ---------------------
 - Här är en överblick över filstrukturen:  
-root/
-├── backend/
-│   ├── app.ts 
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── scrumboard.db  (SQLite-databasen)
-│   ├── server.ts
-│   ├── tsconfig.json
-│   ├── src/  
-│   │   ├── database/    (All logik för att hantera databasen)                 
-│   │   |  ├── database.controller.ts
-│   │   |  ├── database.statements.ts
-│   │   |  ├── database.config.ts
-│   │   ├── models/      (TS typer)
-│   │   |  ├── tasks.types.ts
-│   │   ├── routes/      (Definierar API-endpoints och kopplar requests till rätt funktioner)
-│   │   |  ├── task.route.ts
+root/  
+├── backend/  
+│   ├── app.ts   
+│   ├── package.json  
+│   ├── package-lock.json  
+│   ├── scrumboard.db  (SQLite-databasen)  
+│   ├── server.ts  
+│   ├── tsconfig.json  
+│   ├── src/    
+│   │   ├── database/    (All logik för att hantera databasen)                   
+│   │   |  ├── database.controller.ts  
+│   │   |  ├── database.statements.ts  
+│   │   |  ├── database.config.ts  
+│   │   ├── models/      (TS typer)  
+│   │   |  ├── tasks.types.ts  
+│   │   ├── routes/      (Definierar API-endpoints och kopplar requests till rätt funktioner)  
+│   │   |  ├── task.route.ts  
 ├── frontend/
 │   ├── .gitignore
 │   ├── index.html
