@@ -19,7 +19,7 @@ export const createTask = (newTask: newTask): number => {
           newTask.project, 
           newTask.description, 
           newTask.deadline,
-          newTask.person,
+          newTask.person || 'undefined',
           newTask.category
      );
 

@@ -13,7 +13,6 @@ export const getAllTasks = async ():Promise<Task[]> => {
      return tasks;
 }
 
-//funktionen tar emot 2 argument
 export const updateStatus = async (id:number, status:string) => {
      const options = {
         method: 'PATCH',

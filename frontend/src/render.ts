@@ -259,8 +259,8 @@ export const renderTasks = (tasks: Task[]) => {
                               const result = await createNewTask(
                                    titel,
                                    project,
-                                   deadline,
                                    description,
+                                   deadline,
                                    person,
                                    category
                               );

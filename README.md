@@ -21,7 +21,7 @@ root/
 │   ├── app.ts 
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── scrumboard.db  (SQLite-databasen)
+│   ├── scrumboardDatabase.db  (SQLite-databasen)
 │   ├── server.ts
 │   ├── tsconfig.json
 │   ├── src/  

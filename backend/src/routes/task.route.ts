@@ -23,17 +23,16 @@ router.post('/',
      .notEmpty()
      .withMessage('Description is required'),
 
-     body('deadline')
      //måste vara giltigt ISO-datum
+     body('deadline')
      .isISO8601()
      .withMessage('Deadline must be a valid date like (2026-05-27)'), 
 
      body('person')
-     .notEmpty()
-     .withMessage('Assigned to name is required'),
+     .optional(),
 
-     body('category')
      //isIn - Skyddar databas mot ogiltiga värden
+     body('category')
      .isIn(['ux', 'frontend', 'backend'])
      .withMessage('Invalid category'),
      
@@ -44,8 +43,8 @@ router.post('/',
      const errors = validationResult(req);
 
      //error handling
+     //return stoppar funktion om blir validationfel
      if (!errors.isEmpty()) {
-          //return stoppar funktion om blir validationfel
           return res.status(400).json({
                errors: errors.array(),
           });
