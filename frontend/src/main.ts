@@ -1,5 +1,5 @@
 import { getAllTasks } from "./api";
-import { renderTasks } from "./render";
+import { renderTasks, initEvents } from "./render";
 
-//Hämta array av task och rendera "task-kort"  
-getAllTasks().then(renderTasks)
+//Hämta array av task och rendera "task-kort" och skapa ny task funciton
+getAllTasks().then(renderTasks).then(initEvents);

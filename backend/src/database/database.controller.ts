@@ -19,7 +19,6 @@ export const createTask = (newTask: newTask): number => {
           newTask.project, 
           newTask.description, 
           newTask.deadline,
-          newTask.person || 'undefined',
           newTask.category
      );
 
@@ -31,19 +30,23 @@ export const updateStatus = (id: number, status: string):number => {
      return result.changes as number;
 }
 
+export const assign = (id: number, status: string, person:string):number => {
+     const result = stmt.assignStmt.run(status, person, id);
+     return result.changes as number;
+}
+
 export const updateAll = (
      id:number,
      title: string, 
      project:string, 
      description:string, 
      deadline:string, 
-     person:string, 
      category:string) => {
-     const result = stmt.updateAllStmt.run(             title, 
+     const result = stmt.updateAllStmt.run(             
+          title, 
           project,
           deadline,
           description,
-          person,
           category, 
           id
      )

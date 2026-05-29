@@ -34,16 +34,35 @@ export const updateStatus = async (id:number, status:string) => {
      return data;
 }
 
-export const updateAll = async (id:number, title:string, project:string, description:string, deadline:string, person:string, status:string, category:string) => {
+export const assign = async (id:number, status:string, person:string) => {
+     const options = {
+        method: 'PATCH',
+        body: JSON.stringify({status: status, person:person}),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"}
+          }
+
+     //skicka HTTP-request till backend
+     const res = await fetch(BASE_URL + id + '/' + 'assign' , options);
+
+     //Error hantering
+     if (!res.ok) {
+          throw new Error('Could not update Status');
+     }
+
+     //returnerar response från backend
+     const data = await res.json();
+     return data;
+}
+
+export const updateAll = async (id:number, title:string, project:string, description:string, deadline:string, status:string, category:string) => {
      const options = {
         method: 'PATCH',
         body: JSON.stringify({
-          id: id,
           title: title,
           project: project,
           description: description,
           deadline: deadline,
-          person: person,
           status: status,
           category: category
           }),
@@ -54,6 +73,8 @@ export const updateAll = async (id:number, title:string, project:string, descrip
      const res = await fetch(BASE_URL + id + '/' + 'edit', options);
 
      if (!res.ok) {
+           const errorData = await res.json();
+          console.log("BACKEND ERROR:", errorData);
           throw new Error('Could not update');
      }
 
@@ -61,7 +82,7 @@ export const updateAll = async (id:number, title:string, project:string, descrip
      return data;
 }
 
-export const createNewTask = async (title:string, project:string, description:string, deadline:string, person:string, category:string) => {
+export const createNewTask = async (title:string, project:string, description:string, deadline:string, category:string) => {
      const options = {
         method: 'POST',
         body: JSON.stringify({
@@ -69,7 +90,6 @@ export const createNewTask = async (title:string, project:string, description:st
           project: project,
           description: description,
           deadline: deadline,
-          person: person,
           category: category
           }),
         headers: {

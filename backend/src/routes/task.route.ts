@@ -28,9 +28,6 @@ router.post('/',
      .isISO8601()
      .withMessage('Deadline must be a valid date like (2026-05-27)'), 
 
-     body('person')
-     .optional(),
-
      //isIn - Skyddar databas mot ogiltiga värden
      body('category')
      .isIn(['ux', 'frontend', 'backend'])
@@ -112,6 +109,48 @@ router.patch('/:id/status',
      }
 );
 
+router.patch('/:id/assign',
+     param('id')
+     .isInt()
+     .withMessage('Id must be a number'),
+
+     body('person')
+     .notEmpty()
+     .withMessage('A name is required'),
+
+     body('status')
+     .notEmpty()
+     .withMessage('Status is required')
+     .isIn(['new', 'doing', 'done'])
+     .withMessage('Invalid status'),
+
+     (req: Request, res: Response)=> {
+          const errors = validationResult(req);
+
+          if (!errors.isEmpty()) {
+               return res.status(400).json({
+                    errors: errors.array(),
+               });
+          }
+
+          const id = Number(req.params.id);
+          const {status, person} = req.body;
+          const hasUpdated = db.assign(id, status, person);
+
+          if (!hasUpdated) {
+               return res.status(404).json({
+                    success: false,
+                    message: 'Task not found',
+               });
+          }
+
+          res.json({
+               success: true,
+               message: 'Status updated successfully',
+          });
+     }
+);
+
 //router svarar på HTTP PATCH med endpoint '/id/edit'
 router.patch('/:id/edit', 
      
@@ -135,10 +174,6 @@ router.patch('/:id/edit',
      .isISO8601()
      .withMessage('Deadline must be a valid date like (2026-05-27)'), 
 
-     body('person')
-     .notEmpty()
-     .withMessage('Assigned to name is required'),
-
      body('category')
      .isIn(['ux', 'frontend', 'backend'])
      .withMessage('Invalid category'),
@@ -156,9 +191,8 @@ router.patch('/:id/edit',
           const {
                title, 
                project,
-               deadline,
                description,
-               person,
+               deadline,
                category
           } = req.body;
 
@@ -166,9 +200,8 @@ router.patch('/:id/edit',
                id, 
                title, 
                project,
-               deadline,
                description,
-               person,
+               deadline,
                category
           );
 

@@ -14,6 +14,5 @@ export type newTask = {
      project: string;
      description: string;
      deadline: string;
-     person: string;
      category: string;
 }
